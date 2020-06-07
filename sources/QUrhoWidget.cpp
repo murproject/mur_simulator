@@ -90,6 +90,13 @@ namespace QUrho {
         }
     }
 
+    Urho3DCoreWidget::~Urho3DCoreWidget() {
+    }
+
+    void Urho3DCoreWidget::Exit() {
+        m_engine->Exit();
+    }
+
     QUrhoWidget::QUrhoWidget(QWidget *parent) :
             QWidget(parent),
             m_coreWidget{new Urho3DCoreWidget{new Urho3D::Context, this}},
@@ -114,5 +121,9 @@ namespace QUrho {
 
     QUrhoInput *QUrhoWidget::GetUrho3DInput() {
         return m_input.data();
+    }
+
+    void QUrhoWidget::Exit() {
+        m_coreWidget->Exit();
     }
 }

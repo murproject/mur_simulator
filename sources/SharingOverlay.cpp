@@ -34,7 +34,6 @@ namespace QUrho {
     }
 
     const Control &SharingOverlay::GetControl() const {
-        std::lock_guard<std::mutex> lock(m_controlMutex);
         return m_control;
     }
 
@@ -59,23 +58,17 @@ namespace QUrho {
         zmq_bind(m_zmqTelemetryData, "tcp://127.0.0.1:3390");
 
         zmq_bind(m_userApiPair, "tcp://127.0.0.1:3391");
+//
+//        m_controlUpdateThread = std::thread([this]() {
+//            while (m_update) {
 
-        m_controlUpdateThread = std::thread([this]() {
-            while (m_update) {
-                zmq_msg_t controlData{};
-                zmq_msg_init(&controlData);
-                if (zmq_msg_recv(&controlData, m_userApiPair, ZMQ_DONTWAIT) != -1) {
-                    std::lock_guard<std::mutex> lock(m_controlMutex);
-                    std::memcpy(&m_control, zmq_msg_data(&controlData), zmq_msg_size(&controlData));
-                }
-                zmq_msg_close(&controlData);
-            }
-        });
+//            }
+//        });
     }
 
     SharingOverlay::~SharingOverlay() {
         m_update = false;
-        m_controlUpdateThread.join();
+//        m_controlUpdateThread.join();
         zmq_close(m_zmqBottomData);
         zmq_close(m_zmqFrontData);
         zmq_close(m_zmqTelemetryData);
@@ -95,7 +88,14 @@ namespace QUrho {
         m_telemetry.pitch = rotation.x_;
         m_telemetry.roll = rotation.z_;
         m_telemetry.depth = m_urhoScene->GetAUVOverlay()->GetAUVDepth();
-        SentData(m_zmqTelemetryData, reinterpret_cast<unsigned char *>(&m_telemetry), sizeof(m_telemetry));
+        SentData(m_zmqTelemetryData, reinterpret_cast<unsigned char *>(&m_telemetry), sizeof(Telemetry));
+
+        zmq_msg_t controlData{};
+        zmq_msg_init(&controlData);
+        if (zmq_msg_recv(&controlData, m_userApiPair, ZMQ_DONTWAIT) != -1) {
+            std::memcpy(&m_control, zmq_msg_data(&controlData), zmq_msg_size(&controlData));
+        }
+        zmq_msg_close(&controlData);
     }
 
     void SharingOverlay::SentData(void *socket, const unsigned char *data, size_t size) {
@@ -112,5 +112,18 @@ namespace QUrho {
 
     void SharingOverlay::Reset() {
         m_control = {};
+    }
+
+    void SharingOverlay::SetPingers(Pingers &pinger) {
+        m_telemetry.angle_0 = pinger.angle_0;
+        m_telemetry.angle_1 = pinger.angle_1;
+        m_telemetry.angle_2 = pinger.angle_2;
+        m_telemetry.angle_3 = pinger.angle_3;
+
+        m_telemetry.distance_0 = pinger.distance_0;
+        m_telemetry.distance_1 = pinger.distance_1;
+        m_telemetry.distance_2= pinger.distance_2;
+        m_telemetry.distance_3 = pinger.distance_3;
+
     }
 }

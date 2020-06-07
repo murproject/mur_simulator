@@ -15,6 +15,8 @@ namespace QUrho {
 
     class AUVOverlay;
 
+    class PingerOverlay;
+
     class SharingOverlay;
 
     class QUrhoScene : public QObject, public Urho3D::Object {
@@ -32,7 +34,9 @@ namespace QUrho {
 
         Urho3D::Scene *GetScene();
 
-        SharingOverlay* GetNetworkOverlay();
+        SharingOverlay *GetNetworkOverlay();
+
+        PingerOverlay* GetPingerOverlay();
 
         void AddOverlay(QSceneOverlay *overlay);
 
@@ -48,6 +52,7 @@ namespace QUrho {
         QScopedPointer<ViewportOverlay> m_viewportsOverlay;
         QScopedPointer<AUVOverlay> m_auvOverlay;
         QScopedPointer<SharingOverlay> m_sharingOverlay;
+        QScopedPointer<PingerOverlay> m_pingerOverlay;
 
         QList<QSceneOverlay *> m_overlays;
         QUrhoWidget *m_urhoWidget;

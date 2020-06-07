@@ -32,11 +32,12 @@ namespace QUrho {
 
         void Update(QUrhoInput *input, float timeStep) override {
             const auto rotationSpeed = 0.2f;
-            const auto cameraDistance = 1.5f;
+            const auto cameraDistance = 1.8f;
             Urho3D::Quaternion rotation;
             Urho3D::Vector3 position;
             const auto mouseMove = input->GetMouseMove();
-            if ((mouseMove.y_ != 0 || mouseMove.x_ != 0) && (input->IsMouseButtonPressed(Qt::MiddleButton) || input->IsKeyPressed(Qt::Key_Shift))) {
+            if ((mouseMove.y_ != 0 || mouseMove.x_ != 0) &&
+                (input->IsMouseButtonPressed(Qt::MiddleButton) || input->IsKeyPressed(Qt::Key_Shift))) {
                 auto yawAngle =
                         m_cameraNode.GetRotation().YawAngle() + static_cast<float>(mouseMove.x_) * rotationSpeed;
                 auto pitchAngle =
@@ -63,8 +64,8 @@ namespace QUrho {
             Object{context},
             m_scene{scene->GetScene()},
             m_urhoScene{scene},
-            m_frontImage(cv::Size(320, 240), CV_8UC3),
-            m_bottomImage(cv::Size(320, 240), CV_8UC3),
+            m_frontImage(cv::Size(320, 240), CV_8UC4),
+            m_bottomImage(cv::Size(320, 240), CV_8UC4),
             m_distribution{-5, 5} {
     }
 
@@ -178,7 +179,7 @@ namespace QUrho {
         CreateThrustersNodes();
         CreateCamerasNodes();
         SetupGravity(-0.05);
-        CreateWater();
+        //CreateWater();
         CreateRenderTextures();
     }
 
@@ -205,10 +206,7 @@ namespace QUrho {
         m_viewport = QSharedPointer<AUVViewport>::create(GetContext(), m_scene, nullptr, m_auvNode);
         m_viewport->SetTransform(defaultPosition, defaultRotation);
         m_viewport->GetViewport()->GetRenderPath()->Append(
-                cache->GetResource<Urho3D::XMLFile>("PostProcess/FXAA3.xml"));
-        m_viewport->GetViewport()->GetRenderPath()->Append(
-                cache->GetResource<Urho3D::XMLFile>("PostProcess/ColorCorrection.xml"));
-
+                cache->GetResource<Urho3D::XMLFile>("PostProcess/FXAA2.xml"));
 
         m_urhoScene->GetViewportOverlay()->AddViewport(m_viewport);
     }
@@ -333,20 +331,13 @@ namespace QUrho {
 
         m_frontCameraViewport = QSharedPointer<Viewport>::create(GetContext(), m_scene,
                                                                  m_frontCameraNode->GetComponent<Urho3D::Camera>());
-        m_frontCameraViewport->GetViewport()->GetRenderPath()->Append(
-                cache->GetResource<Urho3D::XMLFile>("PostProcess/FXAA2.xml"));
-        m_frontCameraViewport->GetViewport()->GetRenderPath()->Append(
-                cache->GetResource<Urho3D::XMLFile>("PostProcess/ColorCorrection.xml"));
+
 
         m_bottomCameraNode = cameraCreate(m_auvNode, Urho3D::Vector3(0, -0.005, 0.1),
                                           Urho3D::Quaternion(90.0f, Urho3D::Vector3::RIGHT));
 
         m_bottomCameraViewport = QSharedPointer<Viewport>::create(GetContext(), m_scene,
                                                                   m_bottomCameraNode->GetComponent<Urho3D::Camera>());
-        m_bottomCameraViewport->GetViewport()->GetRenderPath()->Append(
-                cache->GetResource<Urho3D::XMLFile>("PostProcess/FXAA2.xml"));
-        m_bottomCameraViewport->GetViewport()->GetRenderPath()->Append(
-                cache->GetResource<Urho3D::XMLFile>("PostProcess/ColorCorrection.xml"));
     }
 
     void AUVOverlay::SetupGravity(float value) {
@@ -430,14 +421,16 @@ namespace QUrho {
         while (auto node = m_scene->GetChild("ShootObject", true)) {
             node->Remove();
         }
+        m_lastDropValue = 0;
+        m_lastShootValue = 0;
     }
 
     void AUVOverlay::CreateRenderTextures() {
         m_frontCameraTexture = Urho3D::MakeShared<Urho3D::Texture2D>(GetContext());
         m_bottomCameraTexture = Urho3D::MakeShared<Urho3D::Texture2D>(GetContext());
 
-        m_frontCameraTexture->SetSize(320, 240, Urho3D::Graphics::GetRGBFormat(), Urho3D::TEXTURE_RENDERTARGET);
-        m_bottomCameraTexture->SetSize(320, 240, Urho3D::Graphics::GetRGBFormat(), Urho3D::TEXTURE_RENDERTARGET);
+        m_frontCameraTexture->SetSize(320, 240, Urho3D::Graphics::GetRGBAFormat(), Urho3D::TEXTURE_RENDERTARGET);
+        m_bottomCameraTexture->SetSize(320, 240, Urho3D::Graphics::GetRGBAFormat(), Urho3D::TEXTURE_RENDERTARGET);
 
         auto renderSurface = m_frontCameraTexture->GetRenderSurface();
         renderSurface->SetViewport(0, m_frontCameraViewport->GetViewport());
@@ -454,8 +447,11 @@ namespace QUrho {
         m_frontCameraTexture->GetData(0, m_frontImage.data);
         m_bottomCameraTexture->GetData(0, m_bottomImage.data);
 
-        cv::cvtColor(m_frontImage, m_frontImage, cv::COLOR_BGR2RGB);
-        cv::cvtColor(m_bottomImage, m_bottomImage, cv::COLOR_BGR2RGB);
+        cv::Mat image_front;
+        cv::Mat image_bottom;
+
+        cv::cvtColor(m_frontImage, m_frontImage, cv::COLOR_RGBA2BGRA);
+        cv::cvtColor(m_bottomImage, m_bottomImage, cv::COLOR_RGBA2BGRA);
 
         if (m_showFrontImage) {
             cv::imshow("Front camera image", m_frontImage);
@@ -537,6 +533,13 @@ namespace QUrho {
         auto shoot = m_urhoScene->GetNetworkOverlay()->GetControl().colorG;
         auto drop = m_urhoScene->GetNetworkOverlay()->GetControl().colorB;
 
+        if (shoot == 0) {
+            m_lastShootValue = 0;
+        }
+
+        if (drop == 0) {
+            m_lastDropValue = 0;
+        }
         if (shoot != 0 && m_lastShootValue != shoot) {
             Shoot();
             m_lastShootValue = shoot;

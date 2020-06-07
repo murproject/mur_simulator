@@ -18,6 +18,15 @@ namespace QUrho {
         float temperature = 0.0f;
         float pressure = 0.0f;
         float voltage = 0.0f;
+
+        float angle_0 = 0.0f;
+        float angle_1 = 0.0f;
+        float angle_2 = 0.0f;
+        float angle_3 = 0.0f;
+        float distance_0 = 0.0f;
+        float distance_1 = 0.0f;
+        float distance_2 = 0.0f;
+        float distance_3 = 0.0f;
     };
 
     struct Control {
@@ -28,6 +37,20 @@ namespace QUrho {
         uint8_t colorB = 0;
         float onDelay = 0;
         float offDelay = 0;
+    };
+
+    struct Pingers {
+        float angle_0 = 0.0f;
+        float distance_0 = 0.0f;
+
+        float angle_1 = 0.0f;
+        float distance_1 = 0.0f;
+
+        float angle_2 = 0.0f;
+        float distance_2 = 0.0f;
+
+        float angle_3 = 0.0f;
+        float distance_3 = 0.0f;
     };
 #pragma pack(pop)
 
@@ -52,6 +75,8 @@ namespace QUrho {
         const Control &GetControl() const;
 
         void SetTelemetry(Telemetry &telemetry);
+
+        void SetPingers(Pingers &pinger);
 
         void Reset();
 

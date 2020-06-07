@@ -19,6 +19,8 @@ namespace QUrho {
             m_angularDampingSlider(new ValueSlider(Qt::Orientation::Horizontal, this)),
             m_linearDampingLabel(new QLabel("Linear damping: ", this)),
             m_linearDampingSlider(new ValueSlider(Qt::Orientation::Horizontal, this)),
+            m_pingerUpdateTime(new QLabel("Pinger update: ", this)),
+            m_pingerUpdateTimeSlider(new ValueSlider(Qt::Orientation::Horizontal, this)),
             m_frontCameraCheckbox(new QCheckBox("Show front camera", this)),
             m_bottomCameraCheckbox(new QCheckBox("Show bottom camera", this)),
             m_apply(new QPushButton(tr("Apply"), this)),
@@ -29,6 +31,7 @@ namespace QUrho {
         CreateLayout();
         CreateConnections();
         m_buoyancySlider->setRange(-100, 100);
+        m_pingerUpdateTimeSlider->setRange(0, 4000);
         LoadSettings();
     }
 
@@ -58,6 +61,7 @@ namespace QUrho {
         m_auvSettings->setValue("linear damping", m_linearDampingSlider->value());
         m_auvSettings->setValue("show front camera", m_frontCameraCheckbox->isChecked());
         m_auvSettings->setValue("show bottom camera", m_bottomCameraCheckbox->isChecked());
+        m_auvSettings->setValue("pinger update time", m_pingerUpdateTimeSlider->value());
     }
 
     void QAUVSettingsWidget::LoadSettings() {
@@ -66,12 +70,13 @@ namespace QUrho {
         auto linearDamping = m_auvSettings->value("linear damping", 50).toInt();
         auto frontCamera = m_auvSettings->value("show front camera", false).toBool();
         auto bottomCamera = m_auvSettings->value("show front camera", false).toBool();
-
+        auto pingerUpdate = m_auvSettings->value("pinger update time", 2000).toInt();
         m_buoyancySlider->setValue(buoyancy);
         m_angularDampingSlider->setValue(angularDamping);
         m_linearDampingSlider->setValue(linearDamping);
         m_frontCameraCheckbox->setChecked(frontCamera);
         m_bottomCameraCheckbox->setChecked(bottomCamera);
+        m_pingerUpdateTimeSlider->setValue(pingerUpdate);
     }
 
     void QAUVSettingsWidget::CreateLayout() {
@@ -86,6 +91,7 @@ namespace QUrho {
         addSlider(auvLayout, m_buoyancyLabel.data(), m_buoyancySlider.data());
         addSlider(auvLayout, m_angularDampingLabel.data(), m_angularDampingSlider.data());
         addSlider(auvLayout, m_linearDampingLabel.data(), m_linearDampingSlider.data());
+        addSlider(auvLayout, m_pingerUpdateTime.data(), m_pingerUpdateTimeSlider.data());
         {
             auto sub = new QHBoxLayout;
             sub->addWidget(m_frontCameraCheckbox.data());
@@ -133,6 +139,7 @@ namespace QUrho {
         m_buoyancySlider->setValue(5);
         m_angularDampingSlider->setValue(80);
         m_linearDampingSlider->setValue(50);
+        m_pingerUpdateTimeSlider->setValue(2000);
         m_frontCameraCheckbox->setChecked(false);
         m_bottomCameraCheckbox->setChecked(false);
     }
@@ -144,5 +151,9 @@ namespace QUrho {
     void QAUVSettingsWidget::SetLastScene(const QString &scene) {
         m_lastScene = scene;
         m_auvSettings->setValue("last scene", m_lastScene);
+    }
+
+    float QAUVSettingsWidget::GetPingerUpdateTime() {
+        return static_cast<float>(m_pingerUpdateTimeSlider->value()) / 1000.0f;
     }
 }

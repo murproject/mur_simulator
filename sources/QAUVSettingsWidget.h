@@ -19,6 +19,8 @@ namespace QUrho {
 
         float GetGravity();
 
+        float GetPingerUpdateTime();
+
         float GetAngularDamping();
 
         float GetLinearDamping();
@@ -55,6 +57,9 @@ namespace QUrho {
 
         QScopedPointer<QLabel> m_linearDampingLabel;
         QScopedPointer<ValueSlider> m_linearDampingSlider;
+
+        QScopedPointer<QLabel> m_pingerUpdateTime;
+        QScopedPointer<ValueSlider> m_pingerUpdateTimeSlider;
 
         QScopedPointer<QCheckBox> m_frontCameraCheckbox;
 

@@ -14,7 +14,6 @@ find_package(Qt5 REQUIRED COMPONENTS
         Test
         Concurrent
         OpenGL
-        Svg
         )
 
 find_package(OpenCV REQUIRED)
@@ -39,7 +38,7 @@ target_link_libraries(simulator
         Qt5::Widgets
         Qt5::Gui
         Qt5::Xml
-        Qt5::Svg
         libzmq
+        opengl32
         )
 

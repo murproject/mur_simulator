@@ -19,6 +19,9 @@ namespace QUrho {
 
         bool SetResourceCache(const Urho3D::VariantMap &parameters);
 
+        void Exit();
+
+        ~Urho3DCoreWidget();
     signals:
 
         void KeyPressed(QKeyEvent *event);
@@ -64,6 +67,8 @@ namespace QUrho {
         Urho3D::Context *GetUrho3DContext();
 
         QUrhoInput *GetUrho3DInput();
+
+        void Exit();
 
     private:
         QScopedPointer<Urho3DCoreWidget> m_coreWidget;
