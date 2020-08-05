@@ -5,6 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+set(URHO3D_HOME "/home/vlad/Documents/Projects/Urho3D/install")
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
+
 
 find_package(Qt5 REQUIRED COMPONENTS
         Core
@@ -19,7 +22,6 @@ find_package(Qt5 REQUIRED COMPONENTS
 find_package(OpenCV REQUIRED)
 find_package(ZeroMQ REQUIRED)
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 include(UrhoCommon)
 
@@ -38,7 +40,6 @@ target_link_libraries(simulator
         Qt5::Widgets
         Qt5::Gui
         Qt5::Xml
-        libzmq
-        opengl32
+        ${ZMQ_LIBRARIES}
         )
 

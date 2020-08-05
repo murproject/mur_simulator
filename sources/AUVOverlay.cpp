@@ -426,8 +426,8 @@ namespace QUrho {
     }
 
     void AUVOverlay::CreateRenderTextures() {
-        m_frontCameraTexture = Urho3D::MakeShared<Urho3D::Texture2D>(GetContext());
-        m_bottomCameraTexture = Urho3D::MakeShared<Urho3D::Texture2D>(GetContext());
+        m_frontCameraTexture = Urho3D::SharedPtr<Urho3D::Texture2D>(new Urho3D::Texture2D(GetContext()));
+        m_bottomCameraTexture = Urho3D::SharedPtr<Urho3D::Texture2D>(new Urho3D::Texture2D(GetContext()));
 
         m_frontCameraTexture->SetSize(320, 240, Urho3D::Graphics::GetRGBAFormat(), Urho3D::TEXTURE_RENDERTARGET);
         m_bottomCameraTexture->SetSize(320, 240, Urho3D::Graphics::GetRGBAFormat(), Urho3D::TEXTURE_RENDERTARGET);

@@ -1,6 +1,6 @@
 #include <QString>
 #include <Urho3D/Container/Str.h>
-#include <Urho3D/Input/InputConstants.h>
+#include <Urho3D/Input/Input.h>
 #include <opencv2/opencv.hpp>
 #pragma once
 

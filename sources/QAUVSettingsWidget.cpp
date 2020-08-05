@@ -3,7 +3,6 @@
 */
 
 #include "QAUVSettingsWidget.h"
-#include "ValueSlider.h"
 
 #include <QVBoxLayout>
 #include <QGroupBox>

@@ -1,34 +1,17 @@
-# ZeroMQ cmake module
-#
-# The following import targets are created
-#
-# ::
-#
-#   libzmq-static
-#   libzmq
-#
-# This module sets the following variables in your project::
-#
-#   ZeroMQ_FOUND - true if ZeroMQ found on the system
-#   ZeroMQ_INCLUDE_DIR - the directory containing ZeroMQ headers
-#   ZeroMQ_LIBRARY -
-#   ZeroMQ_STATIC_LIBRARY
+# - Try to find ZMQ
+# Once done this will define
+# ZMQ_FOUND - System has ZMQ
+# ZMQ_INCLUDE_DIRS - The ZMQ include directories
+# ZMQ_LIBRARIES - The libraries needed to use ZMQ
+# ZMQ_DEFINITIONS - Compiler switches required for using ZMQ
 
-@PACKAGE_INIT@
+find_path ( ZMQ_INCLUDE_DIR zmq.h )
+find_library ( ZMQ_LIBRARY NAMES zmq )
 
-if(NOT TARGET libzmq AND NOT TARGET libzmq-static)
-  include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
+set ( ZMQ_LIBRARIES ${ZMQ_LIBRARY} )
+set ( ZMQ_INCLUDE_DIRS ${ZMQ_INCLUDE_DIR} )
 
-  if (TARGET libzmq)
-    get_target_property(@PROJECT_NAME@_INCLUDE_DIR libzmq INTERFACE_INCLUDE_DIRECTORIES)
-  else ()
-    get_target_property(@PROJECT_NAME@_INCLUDE_DIR libzmq-static INTERFACE_INCLUDE_DIRECTORIES)
-  endif()
-
-  if (TARGET libzmq)
-    get_target_property(@PROJECT_NAME@_LIBRARY libzmq LOCATION)
-  endif()
-  if (TARGET libzmq-static)
-    get_target_property(@PROJECT_NAME@_STATIC_LIBRARY libzmq-static LOCATION)
-  endif()
-endif()
+include ( FindPackageHandleStandardArgs )
+# handle the QUIETLY and REQUIRED arguments and set ZMQ_FOUND to TRUE
+# if all listed variables are TRUE
+find_package_handle_standard_args ( ZMQ DEFAULT_MSG ZMQ_LIBRARY ZMQ_INCLUDE_DIR )

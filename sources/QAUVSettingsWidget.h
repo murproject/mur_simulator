@@ -7,10 +7,9 @@
 #include <QSlider>
 #include <QCheckBox>
 #include <QPushButton>
+#include "ValueSlider.h"
 
 namespace QUrho {
-
-    class ValueSlider;
 
     class QAUVSettingsWidget : public QDialog {
     Q_OBJECT
