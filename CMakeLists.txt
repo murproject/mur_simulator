@@ -7,15 +7,15 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
-set(OpenCV_DIR "D:/projects/opencv_430/build3")
-set(ZeroMQ_DIR "D:/projects/zeromq-4.3.4/build")
-set(GSTREAMER_DIR "D:/gstreamer/1.0/msvc_x86_64/bin")
-set(URHO3D_HOME "D:/projects/Urho3D-1.7.1/Urho3D-1.7.1/build2")
+#set(OpenCV_DIR "path/to/opencv_430/build")
+#set(ZeroMQ_DIR "path/to/zeromq-4.3.4/build")
+#set(GSTREAMER_DIR "path/to/gstreamer/1.0/msvc_x86_64/bin")
+#set(URHO3D_HOME "path/to/Urho3D-1.7.1/Urho3D-1.7.1/build")
 
-set(ZMQ_INCLUDE_DIR "D:/projects/zeromq-4.3.4/include")
-set(ZMQ_LIBRARY "D:/projects/zeromq-4.3.4/build/lib/Release/libzmq-v142-mt-4_3_4.lib")
-set(ZEROMQ "D:/projects/zeromq-4.3.4/build")
-include_directories("D:/projects/zeromq-4.3.4/include")
+#set(ZMQ_INCLUDE_DIR "path/to/zeromq-4.3.4/include")
+#set(ZMQ_LIBRARY "path/to/zeromq-4.3.4/build/lib/Release/libzmq-v142-mt-4_3_4.lib")
+#set(ZEROMQ "path/to/zeromq-4.3.4/build")
+#include_directories("path/to/zeromq-4.3.4/include")
 
 find_package(Qt5 REQUIRED COMPONENTS
         Core
