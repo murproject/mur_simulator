@@ -94,10 +94,12 @@ namespace QUrho {
     }
 
     void Urho3DCoreWidget::Exit() {
+        m_engine->SetAutoExit(true);
         m_engine->Exit();
     }
 
-    QUrhoWidget::QUrhoWidget(QWidget *parent) :
+
+QUrhoWidget::QUrhoWidget(QWidget *parent) :
             QWidget(parent),
             m_coreWidget{new Urho3DCoreWidget{new Urho3D::Context, this}},
             m_input{new QUrhoInput{m_coreWidget->GetContext(), m_coreWidget.data(), this}} {

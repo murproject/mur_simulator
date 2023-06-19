@@ -7,10 +7,9 @@
 #include <QSlider>
 #include <QCheckBox>
 #include <QPushButton>
+#include "ValueSlider.h"
 
 namespace QUrho {
-
-    class ValueSlider;
 
     class QAUVSettingsWidget : public QDialog {
     Q_OBJECT
@@ -20,6 +19,12 @@ namespace QUrho {
         float GetGravity();
 
         float GetPingerUpdateTime();
+
+        float GetHydrophoneUpdateTime();
+
+        float GetHydrophoneSignal();
+
+        float GetHydrophoneSpeed();
 
         float GetAngularDamping();
 
@@ -60,6 +65,15 @@ namespace QUrho {
 
         QScopedPointer<QLabel> m_pingerUpdateTime;
         QScopedPointer<ValueSlider> m_pingerUpdateTimeSlider;
+
+        QScopedPointer<QLabel> m_hydrophoneUpdateTime;
+        QScopedPointer<ValueSlider> m_hydrophoneUpdateTimeSlider;
+
+        QScopedPointer<QLabel> m_hydrophoneSignal;
+        QScopedPointer<ValueSlider> m_hydrophoneSignalSlider;
+
+        QScopedPointer<QLabel> m_hydrophoneSpeed;
+        QScopedPointer<ValueSlider> m_hydrophoneSpeedSlider;
 
         QScopedPointer<QCheckBox> m_frontCameraCheckbox;
 

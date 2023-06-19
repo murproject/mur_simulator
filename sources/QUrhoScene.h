@@ -17,6 +17,8 @@ namespace QUrho {
 
     class PingerOverlay;
 
+    class HydrophoneOverlay;
+
     class SharingOverlay;
 
     class QUrhoScene : public QObject, public Urho3D::Object {
@@ -38,6 +40,8 @@ namespace QUrho {
 
         PingerOverlay* GetPingerOverlay();
 
+        HydrophoneOverlay* GetHydrophoneOverlay();
+
         void AddOverlay(QSceneOverlay *overlay);
 
         void RemoveOverlay(QSceneOverlay *overlay);
@@ -53,6 +57,7 @@ namespace QUrho {
         QScopedPointer<AUVOverlay> m_auvOverlay;
         QScopedPointer<SharingOverlay> m_sharingOverlay;
         QScopedPointer<PingerOverlay> m_pingerOverlay;
+        QScopedPointer<HydrophoneOverlay> m_hydrophoneOverlay;
 
         QList<QSceneOverlay *> m_overlays;
         QUrhoWidget *m_urhoWidget;

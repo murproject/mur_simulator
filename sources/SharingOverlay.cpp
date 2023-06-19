@@ -126,4 +126,13 @@ namespace QUrho {
         m_telemetry.distance_3 = pinger.distance_3;
 
     }
+    void SharingOverlay::SetHydrophones(Hydrophones &hydrophone) {
+        m_telemetry.signal_tr = hydrophone.signal_tr;
+        m_telemetry.signal_tl = hydrophone.signal_tl;
+        m_telemetry.signal_fr = hydrophone.signal_fr;
+
+        m_telemetry.distance_tr = hydrophone.distance_tr;
+        m_telemetry.distance_tl = hydrophone.distance_tl;
+        m_telemetry.distance_fr = hydrophone.distance_fr;
+    }
 }

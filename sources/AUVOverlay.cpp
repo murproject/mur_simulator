@@ -179,7 +179,7 @@ namespace QUrho {
         CreateThrustersNodes();
         CreateCamerasNodes();
         SetupGravity(-0.05);
-        //CreateWater();
+        CreateWater();
         CreateRenderTextures();
     }
 
@@ -240,8 +240,8 @@ namespace QUrho {
     }
 
     void AUVOverlay::CreateThrustersNodes() {
-        auto thrusterCreate = [](Urho3D::Node *parent, const Urho3D::Vector3 &position) {
-            auto thruster = parent->GetScene()->CreateChild();
+        auto thrusterCreate = [](Urho3D::Node *parent, const Urho3D::String thrusterName, const Urho3D::Vector3 &position) {
+            auto thruster = parent->GetScene()->CreateChild(thrusterName);
             auto thrusterBody = thruster->CreateComponent<Urho3D::RigidBody>();
             auto thrusterShape = thruster->CreateComponent<Urho3D::CollisionShape>();
             auto thrusterConstraint = thruster->CreateComponent<Urho3D::Constraint>();
@@ -257,11 +257,11 @@ namespace QUrho {
             return thruster;
         };
 
-        m_forwardRightThruster = thrusterCreate(m_auvNode, Urho3D::Vector3(0.12, 0.0095, -0.07));
-        m_forwardLeftThruster = thrusterCreate(m_auvNode, Urho3D::Vector3(-0.12, 0.0095, -0.07));
-        m_topRightThruster = thrusterCreate(m_auvNode, Urho3D::Vector3(0.12, 0.0095, 0.06));
-        m_topLeftThruster = thrusterCreate(m_auvNode, Urho3D::Vector3(-0.12, 0.0095, 0.06));
-        m_bottomThruster = thrusterCreate(m_auvNode, Urho3D::Vector3(0.0, -0.07, 0.0));
+        m_forwardRightThruster = thrusterCreate(m_auvNode, "Thruster_FR", Urho3D::Vector3(0.12, 0.0095, -0.07));
+        m_forwardLeftThruster = thrusterCreate(m_auvNode, "Thruster_FL", Urho3D::Vector3(-0.12, 0.0095, -0.07));
+        m_topRightThruster = thrusterCreate(m_auvNode, "Thruster_TR", Urho3D::Vector3(0.12, 0.0095, 0.06));
+        m_topLeftThruster = thrusterCreate(m_auvNode, "Thruster_TL", Urho3D::Vector3(-0.12, 0.0095, 0.06));
+        m_bottomThruster = thrusterCreate(m_auvNode, "Thruster_B", Urho3D::Vector3(0.0, -0.07, 0.0));
     }
 
     void AUVOverlay::ApplyBuoyancyForces() {
@@ -426,9 +426,8 @@ namespace QUrho {
     }
 
     void AUVOverlay::CreateRenderTextures() {
-        m_frontCameraTexture = Urho3D::MakeShared<Urho3D::Texture2D>(GetContext());
-        m_bottomCameraTexture = Urho3D::MakeShared<Urho3D::Texture2D>(GetContext());
-
+        m_frontCameraTexture = Urho3D::SharedPtr<Urho3D::Texture2D>(new Urho3D::Texture2D(GetContext()));
+        m_bottomCameraTexture = Urho3D::SharedPtr<Urho3D::Texture2D>(new Urho3D::Texture2D(GetContext()));
         m_frontCameraTexture->SetSize(320, 240, Urho3D::Graphics::GetRGBAFormat(), Urho3D::TEXTURE_RENDERTARGET);
         m_bottomCameraTexture->SetSize(320, 240, Urho3D::Graphics::GetRGBAFormat(), Urho3D::TEXTURE_RENDERTARGET);
 

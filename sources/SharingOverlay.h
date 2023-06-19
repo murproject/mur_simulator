@@ -27,6 +27,14 @@ namespace QUrho {
         float distance_1 = 0.0f;
         float distance_2 = 0.0f;
         float distance_3 = 0.0f;
+
+        uint8_t signal_tr = 0;
+        uint8_t signal_tl = 0;
+        uint8_t signal_fr = 0;
+        uint16_t distance_tr = 0;
+        uint16_t distance_tl = 0;
+        uint16_t distance_fr = 0;
+
     };
 
     struct Control {
@@ -52,6 +60,17 @@ namespace QUrho {
         float angle_3 = 0.0f;
         float distance_3 = 0.0f;
     };
+
+    struct Hydrophones {
+        uint8_t signal_tr = 0;
+        uint8_t signal_tl = 0;
+        uint8_t signal_fr = 0;
+        uint16_t distance_tr = 0;
+        uint16_t distance_tl = 0;
+        uint16_t distance_fr = 0;
+
+    };
+
 #pragma pack(pop)
 
 
@@ -77,6 +96,8 @@ namespace QUrho {
         void SetTelemetry(Telemetry &telemetry);
 
         void SetPingers(Pingers &pinger);
+
+        void SetHydrophones(Hydrophones &hydrophone);
 
         void Reset();
 

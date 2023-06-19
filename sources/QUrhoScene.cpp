@@ -5,6 +5,7 @@
 #include "AUVOverlay.h"
 #include "SharingOverlay.h"
 #include "PingersOverlay.h"
+#include "HydrophonesOverlay.h"
 
 #include <Urho3D/Graphics/Graphics.h>
 #include <Urho3D/Input/Input.h>
@@ -28,6 +29,7 @@ namespace QUrho {
             m_viewportsOverlay{new ViewportOverlay{GetContext(), this, this}},
             m_sharingOverlay{new SharingOverlay{GetContext(), this, this}},
             m_pingerOverlay{new PingerOverlay{GetContext(), this, this}},
+            m_hydrophoneOverlay{new HydrophoneOverlay{GetContext(), this, this}},
             m_urhoWidget{urhoWidget} {
         SubscribeToEvent(Urho3D::E_UPDATE, URHO3D_HANDLER(QUrhoScene, HandleUpdate));
 
@@ -39,6 +41,7 @@ namespace QUrho {
         AddOverlay(m_auvOverlay.data());
         AddOverlay(m_sharingOverlay.data());
         AddOverlay(m_pingerOverlay.data());
+        AddOverlay(m_hydrophoneOverlay.data());
     }
 
     void QUrhoScene::HandleUpdate(Urho3D::StringHash eventType, Urho3D::VariantMap &eventData) {
@@ -66,6 +69,7 @@ namespace QUrho {
         if (loadResult) {
             m_auvOverlay->CreateAUV();
             m_pingerOverlay->CreatePingers();
+            m_hydrophoneOverlay->CreateHydrophones();
         }
         m_scene->GetComponent<Urho3D::PhysicsWorld>()->SetGravity(Urho3D::Vector3::DOWN * 1.5);
         return loadResult;
@@ -106,6 +110,7 @@ namespace QUrho {
         m_sharingOverlay.reset(nullptr);
         m_viewportsOverlay.reset(nullptr);
         m_pingerOverlay.reset(nullptr);
+        m_hydrophoneOverlay.reset(nullptr);
 
     }
 
@@ -113,5 +118,9 @@ namespace QUrho {
         return m_pingerOverlay.data();
     }
 
+    HydrophoneOverlay *QUrhoScene::GetHydrophoneOverlay()
+    {
+        return m_hydrophoneOverlay.data();
+    }
 }
 

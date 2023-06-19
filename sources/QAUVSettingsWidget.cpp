@@ -3,7 +3,6 @@
 */
 
 #include "QAUVSettingsWidget.h"
-#include "ValueSlider.h"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -21,6 +20,12 @@ namespace QUrho {
             m_linearDampingSlider(new ValueSlider(Qt::Orientation::Horizontal, this)),
             m_pingerUpdateTime(new QLabel("Pinger update: ", this)),
             m_pingerUpdateTimeSlider(new ValueSlider(Qt::Orientation::Horizontal, this)),
+            m_hydrophoneUpdateTime(new QLabel("Pulse period: ", this)),
+            m_hydrophoneUpdateTimeSlider(new ValueSlider(Qt::Orientation::Horizontal, this)),
+            m_hydrophoneSignal(new QLabel ("Pulse width: ", this)),
+            m_hydrophoneSignalSlider(new ValueSlider(Qt::Orientation::Horizontal, this)),
+            m_hydrophoneSpeed(new QLabel ("Spreading speed: ", this)),
+            m_hydrophoneSpeedSlider(new ValueSlider(Qt::Orientation::Horizontal, this)),
             m_frontCameraCheckbox(new QCheckBox("Show front camera", this)),
             m_bottomCameraCheckbox(new QCheckBox("Show bottom camera", this)),
             m_apply(new QPushButton(tr("Apply"), this)),
@@ -32,6 +37,9 @@ namespace QUrho {
         CreateConnections();
         m_buoyancySlider->setRange(-100, 100);
         m_pingerUpdateTimeSlider->setRange(0, 4000);
+        m_hydrophoneUpdateTimeSlider->setRange(3000, 5000);
+        m_hydrophoneSignalSlider->setRange(100, 300);
+        m_hydrophoneSpeedSlider->setRange(800, 900);
         LoadSettings();
     }
 
@@ -61,7 +69,9 @@ namespace QUrho {
         m_auvSettings->setValue("linear damping", m_linearDampingSlider->value());
         m_auvSettings->setValue("show front camera", m_frontCameraCheckbox->isChecked());
         m_auvSettings->setValue("show bottom camera", m_bottomCameraCheckbox->isChecked());
-        m_auvSettings->setValue("pinger update time", m_pingerUpdateTimeSlider->value());
+        m_auvSettings->setValue("pulse period", m_pingerUpdateTimeSlider->value());
+        m_auvSettings->setValue("pulse width", m_hydrophoneSignalSlider->value());
+        m_auvSettings->setValue("spreading speed", m_hydrophoneSpeedSlider->value());
     }
 
     void QAUVSettingsWidget::LoadSettings() {
@@ -70,13 +80,19 @@ namespace QUrho {
         auto linearDamping = m_auvSettings->value("linear damping", 50).toInt();
         auto frontCamera = m_auvSettings->value("show front camera", false).toBool();
         auto bottomCamera = m_auvSettings->value("show front camera", false).toBool();
-        auto pingerUpdate = m_auvSettings->value("pinger update time", 2000).toInt();
+        auto pingerUpdate = m_auvSettings->value("pinger update", 2000).toInt();
+        auto hydrophoneUpdate = m_auvSettings->value("pulse period", 4000).toInt();
+        auto hydrophoneSignal = m_auvSettings->value("pulse width", 200).toInt();
+        auto hydrophoneSpeed = m_auvSettings->value("spreading speed", 850).toInt();
         m_buoyancySlider->setValue(buoyancy);
         m_angularDampingSlider->setValue(angularDamping);
         m_linearDampingSlider->setValue(linearDamping);
         m_frontCameraCheckbox->setChecked(frontCamera);
         m_bottomCameraCheckbox->setChecked(bottomCamera);
         m_pingerUpdateTimeSlider->setValue(pingerUpdate);
+        m_hydrophoneUpdateTimeSlider->setValue(hydrophoneUpdate);
+        m_hydrophoneSignalSlider->setValue(hydrophoneSignal);
+        m_hydrophoneSpeedSlider->setValue(hydrophoneSpeed);
     }
 
     void QAUVSettingsWidget::CreateLayout() {
@@ -92,6 +108,9 @@ namespace QUrho {
         addSlider(auvLayout, m_angularDampingLabel.data(), m_angularDampingSlider.data());
         addSlider(auvLayout, m_linearDampingLabel.data(), m_linearDampingSlider.data());
         addSlider(auvLayout, m_pingerUpdateTime.data(), m_pingerUpdateTimeSlider.data());
+        addSlider(auvLayout, m_hydrophoneUpdateTime.data(), m_hydrophoneUpdateTimeSlider.data());
+        addSlider(auvLayout, m_hydrophoneSignal.data(), m_hydrophoneSignalSlider.data());
+        addSlider(auvLayout, m_hydrophoneSpeed.data(), m_hydrophoneSpeedSlider.data());
         {
             auto sub = new QHBoxLayout;
             sub->addWidget(m_frontCameraCheckbox.data());
@@ -140,6 +159,9 @@ namespace QUrho {
         m_angularDampingSlider->setValue(80);
         m_linearDampingSlider->setValue(50);
         m_pingerUpdateTimeSlider->setValue(2000);
+        m_hydrophoneUpdateTimeSlider->setValue(4000);
+        m_hydrophoneSignalSlider->setValue(200);
+        m_hydrophoneSpeedSlider->setValue(850);
         m_frontCameraCheckbox->setChecked(false);
         m_bottomCameraCheckbox->setChecked(false);
     }
@@ -155,5 +177,17 @@ namespace QUrho {
 
     float QAUVSettingsWidget::GetPingerUpdateTime() {
         return static_cast<float>(m_pingerUpdateTimeSlider->value()) / 1000.0f;
+    }
+
+    float QAUVSettingsWidget::GetHydrophoneUpdateTime() {
+        return static_cast<float>(m_hydrophoneUpdateTimeSlider->value()) / 1000.0f;
+    }
+
+    float QAUVSettingsWidget::GetHydrophoneSignal() {
+        return static_cast<float>(m_hydrophoneSignalSlider->value()) / 1000.0f;
+    }
+
+    float QAUVSettingsWidget::GetHydrophoneSpeed() {
+        return static_cast<float>(m_hydrophoneSpeedSlider->value()) / 100.0f;
     }
 }
