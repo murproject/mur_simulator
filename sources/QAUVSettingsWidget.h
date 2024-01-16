@@ -18,8 +18,6 @@ namespace QUrho {
 
         float GetGravity();
 
-        float GetPingerUpdateTime();
-
         float GetHydrophoneUpdateTime();
 
         float GetHydrophoneSignal();
@@ -63,9 +61,6 @@ namespace QUrho {
         QScopedPointer<QLabel> m_linearDampingLabel;
         QScopedPointer<ValueSlider> m_linearDampingSlider;
 
-        QScopedPointer<QLabel> m_pingerUpdateTime;
-        QScopedPointer<ValueSlider> m_pingerUpdateTimeSlider;
-
         QScopedPointer<QLabel> m_hydrophoneUpdateTime;
         QScopedPointer<ValueSlider> m_hydrophoneUpdateTimeSlider;
 
@@ -84,8 +79,6 @@ namespace QUrho {
         QScopedPointer<QPushButton> m_default;
 
         QString m_lastScene;
-//        QScopedPointer<QLabel> m_rightBackThrusterLabel;
-//        QScopedPointer<ValueSlider> m_buoyancySlider;
     };
 
 }

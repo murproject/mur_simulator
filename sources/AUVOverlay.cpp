@@ -497,12 +497,6 @@ namespace QUrho {
         auto top_right = m_topRightThruster->GetComponent<Urho3D::RigidBody>();
         auto bottom = m_bottomThruster->GetComponent<Urho3D::RigidBody>();
 
-//        for (auto i = 0; i < 8; ++i) {
-//            if (thrust[i] != 0 && std::abs(thrust[i]) > 5) {
-//                thrust[i] += m_distribution(m_generator);
-//            }
-//        }
-
         forward_left->ApplyForce(rotation * Urho3D::Vector3::FORWARD * auvSpeed * static_cast<float>(thrust[0]));
         forward_right->ApplyForce(rotation * Urho3D::Vector3::FORWARD * auvSpeed * static_cast<float>(thrust[1]));
         top_left->ApplyForce(rotation * Urho3D::Vector3::UP * auvSpeed * static_cast<float>(thrust[2]));
