@@ -5,7 +5,7 @@
 #include "QAUVSettingsWidget.h"
 #include "AUVOverlay.h"
 #include "SharingOverlay.h"
-#include "PingersOverlay.h"
+#include "HydrophonesOverlay.h"
 
 #include <Urho3D/Engine/Engine.h>
 #include <Urho3D/Engine/EngineDefs.h>
@@ -194,14 +194,16 @@ namespace QUrho {
             return;
         }
         auto auv = m_scene->GetAUVOverlay();
-        auto pingers = m_scene->GetPingerOverlay();
+        auto hydrophones = m_scene->GetHydrophoneOverlay();
         auv->SetLinearDamping(m_settingsWidget->GetLinearDamping());
         auv->SetAngularDamping(m_settingsWidget->GetAngularDamping());
         auv->ShowBottomCameraImage(m_settingsWidget->ShowBottomCameraImage());
         auv->ShowFrontCameraImage(m_settingsWidget->ShowFrontCameraImage());
         auv->SetGravity(m_settingsWidget->GetGravity());
         auv->SetRemote(m_remote);
-        pingers->SetUpdateTime(m_settingsWidget->GetPingerUpdateTime());
+        hydrophones->SetUpdateTime(m_settingsWidget->GetHydrophoneUpdateTime());
+        hydrophones->SetSignal(m_settingsWidget->GetHydrophoneSignal());
+        hydrophones->SetSpeed(m_settingsWidget->GetHydrophoneSpeed());
         cv::destroyAllWindows();
     }
 
