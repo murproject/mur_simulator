@@ -15,7 +15,7 @@ namespace QUrho {
 
     class AUVOverlay;
 
-    class PingerOverlay;
+    class HydrophoneOverlay;
 
     class SharingOverlay;
 
@@ -36,7 +36,7 @@ namespace QUrho {
 
         SharingOverlay *GetNetworkOverlay();
 
-        PingerOverlay* GetPingerOverlay();
+        HydrophoneOverlay* GetHydrophoneOverlay();
 
         void AddOverlay(QSceneOverlay *overlay);
 
@@ -52,7 +52,7 @@ namespace QUrho {
         QScopedPointer<ViewportOverlay> m_viewportsOverlay;
         QScopedPointer<AUVOverlay> m_auvOverlay;
         QScopedPointer<SharingOverlay> m_sharingOverlay;
-        QScopedPointer<PingerOverlay> m_pingerOverlay;
+        QScopedPointer<HydrophoneOverlay> m_hydrophoneOverlay;
 
         QList<QSceneOverlay *> m_overlays;
         QUrhoWidget *m_urhoWidget;

@@ -65,7 +65,7 @@ namespace QUrho {
     }
 
     void QUrhoInput::OnWheelMoved(QWheelEvent *event) {
-        m_wheelDelta += event->delta() / 120;
+        m_wheelDelta += event->angleDelta().y() / 120;
     }
 
     void QUrhoInput::OnFocusOut(QFocusEvent *event) {

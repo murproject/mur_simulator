@@ -58,17 +58,10 @@ namespace QUrho {
         zmq_bind(m_zmqTelemetryData, "tcp://127.0.0.1:3390");
 
         zmq_bind(m_userApiPair, "tcp://127.0.0.1:3391");
-//
-//        m_controlUpdateThread = std::thread([this]() {
-//            while (m_update) {
-
-//            }
-//        });
     }
 
     SharingOverlay::~SharingOverlay() {
         m_update = false;
-//        m_controlUpdateThread.join();
         zmq_close(m_zmqBottomData);
         zmq_close(m_zmqFrontData);
         zmq_close(m_zmqTelemetryData);
@@ -114,16 +107,13 @@ namespace QUrho {
         m_control = {};
     }
 
-    void SharingOverlay::SetPingers(Pingers &pinger) {
-        m_telemetry.angle_0 = pinger.angle_0;
-        m_telemetry.angle_1 = pinger.angle_1;
-        m_telemetry.angle_2 = pinger.angle_2;
-        m_telemetry.angle_3 = pinger.angle_3;
+    void SharingOverlay::SetHydrophones(Hydrophones &hydrophone) {
+        m_telemetry.signal_tr = hydrophone.signal_tr;
+        m_telemetry.signal_tl = hydrophone.signal_tl;
+        m_telemetry.signal_fr = hydrophone.signal_fr;
 
-        m_telemetry.distance_0 = pinger.distance_0;
-        m_telemetry.distance_1 = pinger.distance_1;
-        m_telemetry.distance_2= pinger.distance_2;
-        m_telemetry.distance_3 = pinger.distance_3;
-
+        m_telemetry.distance_tr = hydrophone.distance_tr;
+        m_telemetry.distance_tl = hydrophone.distance_tl;
+        m_telemetry.distance_fr = hydrophone.distance_fr;
     }
 }
