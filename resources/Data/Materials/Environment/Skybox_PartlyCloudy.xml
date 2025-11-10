@@ -1,0 +1,6 @@
+<material>
+    <technique name="Techniques/DiffSkybox.xml" />
+    <texture unit="diffuse" name="Textures/Skybox/PartlyCloudy/Skybox.xml" />
+    <parameter name="MatDiffColor" value="1.25 1.25 1.25 1" />
+    <cull value="none" />
+</material>

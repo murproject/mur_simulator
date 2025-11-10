@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<material>
+	<technique name="Techniques/DiffAddAlpha.xml" />
+	<texture unit="diffuse" name="Textures/Particles/Flare.dds" />
+	<parameter name="MatDiffColor" value="1 1 1 1" />
+	<depthbias constant="-0.015" slopescaled="0" />
+</material>

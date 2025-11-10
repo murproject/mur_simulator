@@ -1,0 +1,84 @@
+<renderpath>
+    <rendertarget name="depth" sizedivisor="1 1" format="lineardepth" />
+    <command type="clear" color="1 1 1 1" depth="1.0" stencil="0" output="depth" />
+    <command type="scenepass" pass="depth" output="depth" />
+    <command type="clear" color="fog" depth="1.0" stencil="0" />
+    <command type="scenepass" pass="base" vertexlights="true" metadata="base" />
+    <command type="forwardlights" pass="light" />
+    <command type="scenepass" pass="postopaque" />
+
+    <command type="scenepass" pass="alpha" vertexlights="true" sort="backtofront" metadata="alpha">
+        <texture unit="depth" name="depth" />
+    </command>
+
+    <command type="scenepass" pass="refract">
+        <texture unit="environment" name="viewport" />
+    </command>
+
+    <command type="quad" tag="FXAA3" vs="FXAA3" ps="FXAA3" psdefines="FXAA_QUALITY_PRESET=12" output="viewport">
+        <texture unit="diffuse" name="viewport" />
+    </command>
+
+    <rendertarget name="unblurred" sizedivisor="1 1" format="rgba" filter="true" />
+    <rendertarget name="blur_radial" tag="Bloom" sizedivisor="2 2" format="rgba" filter="true" />
+    <rendertarget name="blur_h" tag="FocusBlur" sizedivisor="2 2" format="rgba" filter="true" />
+    <rendertarget name="blur_v" tag="FocusBlur" sizedivisor="2 2" format="rgba" filter="true" />
+
+    <command type="quad" tag="Fisheye" vs="Fisheye" ps="Fisheye" output="viewport">
+        <texture unit="diffuse" name="viewport" />
+        <parameter name="DistortionFactor" value="0.75" />
+    </command>
+
+    <command type="quad" tag="FocusBlur" vs="BlurRotational" ps="BlurRotational" psdefines="BLUR3" output="blur_h">
+        <parameter name="BlurDir" value="1.0 1.0" />
+        <parameter name="BlurDirInv" value="0.0 0.0" />
+        <parameter name="BlurRadius" value="2.0" />
+        <parameter name="BlurSigma" value="2.0" />
+        <texture unit="diffuse" name="viewport" />
+    </command>
+
+    <command type="quad" tag="FocusBlur" vs="BlurRotational" ps="BlurRotational" psdefines="BLUR3" output="blur_v">
+        <parameter name="BlurDir" value="1.0 1.0" />
+        <parameter name="BlurDirInv" value="0.0 1.0" />
+        <parameter name="BlurRadius" value="2.0" />
+        <parameter name="BlurSigma" value="2.0" />
+        <texture unit="diffuse" name="blur_h" />
+    </command>
+
+    <command type="quad" tag="Bloom" vs="BloomComplex" psdefines="COPY"  ps="BloomComplex" output="unblurred">
+        <texture unit="diffuse" name="viewport" />
+    </command>
+
+    <command type="quad" tag="Bloom" vs="BlurRotational" ps="BlurRotational" psdefines="BLUR_RADIAL BLUR7" output="blur_radial">
+        <parameter name="BlurDir" value="1.0 1.0" />
+        <parameter name="BlurDirInv" value="0.0 1.0" />
+        <parameter name="BlurRadius" value="2.0" />
+        <parameter name="BlurSigma" value="1.5" />
+        <texture unit="diffuse" name="viewport" />
+    </command>
+
+    <command type="quad" tag="FocusBlur" vs="FocusBlur" ps="FocusBlur" output="viewport">
+        <parameter name="FocusBlurDepthFactor" value="250.0" />
+        <parameter name="FocusBlurDepthOffset" value="-1.0" />
+        <parameter name="FocusBlurDepthMin" value="0.45" />
+        <texture unit="environment" name="blur_v" />
+        <texture unit="diffuse" name="viewport" />
+        <texture unit="depth" name="depth" />
+    </command>
+
+    <command type="quad" tag="Bloom" vs="BloomComplex" ps="BloomComplex" output="viewport">
+        <texture unit="diffuse" name="viewport" />
+        <texture unit="normal" name="blur_radial" />
+        <texture unit="emissive" name="unblurred" />
+    </command>
+
+    <command type="quad" tag="ChromaticAberration" vs="ChromaticAberration" ps="ChromaticAberration" output="viewport">
+        <parameter name="AberrationStrength" value="1.0" />
+        <texture unit="diffuse" name="viewport" />
+    </command>
+
+    <command type="quad" tag="Noise" vs="Noise" ps="Noise" output="viewport">
+        <parameter name="NoiseStrength" value="0.1" />
+        <texture unit="diffuse" name="viewport" />
+    </command>
+</renderpath>

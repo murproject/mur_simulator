@@ -1,0 +1,2 @@
+Materials/AUV/Frame.xml
+Materials/AUV/Blades.xml

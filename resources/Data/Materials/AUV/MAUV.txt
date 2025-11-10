@@ -1,0 +1,5 @@
+Materials/AUV/Frame.xml
+Materials/AUV/Buoyancy.xml
+Materials/AUV/Acril.xml
+Materials/AUV/Killswitch.xml
+Materials/AUV/Blades.xml

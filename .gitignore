@@ -1,3 +1,18 @@
-**/.vs/
+# Build artifacts
+build
+_build
+_out
 **/out/
+
+# Private settings
 *.user
+**/.vs/
+.vscode
+files
+
+# Private build presets
+CMakeUserPresets.json
+
+# App artifacts
+settings.ini
+simulator.log
